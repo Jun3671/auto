@@ -1,0 +1,30 @@
+name: Daily Job Scraper
+
+on:
+  schedule:
+    - cron: '0 21 * * *'  # 매일 06:00 KST (UTC+9)
+  workflow_dispatch:       # GitHub UI에서 수동 실행 가능
+
+jobs:
+  scrape-jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew build -x test
+
+      - name: Run Job Scraper
+        run: java -jar build/libs/auto-0.0.1-SNAPSHOT.jar --spring.profiles.active=ci
