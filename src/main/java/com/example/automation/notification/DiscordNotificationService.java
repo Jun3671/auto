@@ -46,6 +46,10 @@ public class DiscordNotificationService {
         discordWebhookClient.send(message);
     }
 
+    public void send(DiscordMessageDto message) {
+        discordWebhookClient.send(message);
+    }
+
     private void send(String title, String description, int color) {
         DiscordMessageDto message = DiscordMessageDto.builder()
                 .embeds(List.of(
